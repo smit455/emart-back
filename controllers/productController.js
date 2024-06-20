@@ -45,16 +45,13 @@ exports.getProducts=catchAsyncErrors(async (req,res,next)=>{
     // const apiFeatures=new APIFeatures(Product.find(),req.query).search().filter()
 
     
-    let apiFeatures = new APIFeatures(Product.find(), req.query).search().filter();
-    let products = await apiFeatures.query;
-    const filteredProductsCount = products.length;
+    let apiFeatures = new APIFeatures(Product.find(), req.query)
+        .search()
+        .filter()
+        .pagination(resPerPage);
 
-    // Create a new instance for pagination
-    apiFeatures = new APIFeatures(Product.find(), req.query).search().filter().pagination(resPerPage);
-    products = await apiFeatures.query;
-
-    apiFeatures.pagination(resPerPage)
-    products=await apiFeatures.query;
+    const products = await apiFeatures.query;
+    let filteredProductsCount = products.length;
     res.status(200).json({
         success:true,
         productCount,
