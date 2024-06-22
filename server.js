@@ -2,7 +2,6 @@ const app = require("./app")
 const connectDatabase= require('./config/database')
 const cloudinary=require('cloudinary')
 
-
 process.on('uncaughtException',err=>{
     console.log(`ERROR: ${err.stack}`)
     console.log('Shutting down due to Uncaught exception');

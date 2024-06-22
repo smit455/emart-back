@@ -7,32 +7,47 @@ const sendToken = require('../utils/jwtToken');
 const sendEmail =require('../utils/sendEmail')
 const crypto=require('crypto')
 const cloudinary=require('cloudinary')
-const multer = require('multer');
-const storage = multer.memoryStorage(); 
-const upload = multer({ storage: storage });
+// const multer = require('multer');
+// const storage = multer.memoryStorage(); 
+// const upload = multer({ storage: storage });
 
-upload.single('avatar'),
-exports.registerUser=catchAsyncErrors(async(req,res,next)=>{
-    
-    const result=await cloudinary.v2.uploader.upload(req.body.avatar,{
-        folder:'avatars',
-        width:150,
-        crop:"scale"
-    })
+// supload.single('avatar'),
 
-    const {name,email,passWord}=req.body;
-    const user=await User.create({
-        name,
-        email,
-        passWord,
-        avatar:{
-            public_id:result.public_id,
-            url:result.url
+exports.registerUser = catchAsyncErrors(async (req, res, next) => {
+    try {
+        if (!req.body.avatar) {
+            return next(new ErrorHandler('Avatar image is required', 400));
         }
-    });
-    
-    sendToken(user,200,res)
-})
+        const avatarPath = req.body.avatar;
+
+        if (typeof avatarPath !== 'string') {
+            return next(new ErrorHandler('Invalid avatar URL', 400));
+        }
+        const result = await cloudinary.v2.uploader.upload(avatarPath, {
+            folder: 'avatars',
+            width: 150,
+            crop: "scale"
+        }); 
+
+        const { name, email, passWord } = req.body;
+
+        const user = await User.create({
+            name,
+            email,
+            passWord,
+            avatar: {
+                public_id: result.public_id,
+                url: result.url
+            }
+        });
+
+
+        sendToken(user, 200, res);
+    } catch (error) {
+        console.log("Error:", error);
+        return next(new ErrorHandler('Server Error', 500));
+    }
+});
 
 exports.loginUser=catchAsyncErrors(async(req,res,next)=>{
     const {email,passWord}=req.body;

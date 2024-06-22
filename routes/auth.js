@@ -4,7 +4,7 @@ const router=express.Router();
 const {registerUser,loginUser, logout, forgotPasssword, resetPassword, getUserProfile, updatePassword, updateProfile, allUsers, getUserDetails, updateUser, deleteUser}=require('../controllers/authController');
 const {isAuthenticatedUser,authorizeRoles}=require('../middlewares/auth')
 
-router.route('/register').post(registerUser)
+router.route('/register').post(registerUser) 
 router.route('/login').post(loginUser)
 router.route('/logout').get(logout)
 router.route('/password/forgot').post(forgotPasssword)

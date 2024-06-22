@@ -6,7 +6,7 @@ const fileUpload=require('express-fileupload')
 const path=require('path')
 
 const app = express();
-if(process.env.NODE_ENV!=="PRODUCTION") require('dotenv').config({path: '/server/config/config.env'});
+if(process.env.NODE_ENV!=="PRODUCTION") require('dotenv').config({path: 'server/config/config.env'});
 
 app.use(express.json());
 app.use(bodyparser.urlencoded({extended:true}))
