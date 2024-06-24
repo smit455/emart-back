@@ -12,8 +12,15 @@ app.use(express.json());
 app.use(bodyparser.urlencoded({extended:true}))
 app.use(cookieParser()) 
 app.use(fileUpload({useTempFiles:true}))
-app.use(cors());
 
+app.use(cors({
+    origin: 'http://localhost:3000',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    preflightContinue: false,
+    optionsSuccessStatus: 204
+  }));
+
+app.options('*', cors()); 
 const products=require('./routes/product');
 const auth=require('./routes/auth');
 const order=require('./routes/order')
