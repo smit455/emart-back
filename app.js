@@ -4,7 +4,7 @@ const cookieParser=require('cookie-parser')
 const bodyparser=require('body-parser')
 const fileUpload=require('express-fileupload')
 const path=require('path')
-
+const cors = require('cors');
 const app = express();
 if(process.env.NODE_ENV!=="PRODUCTION") require('dotenv').config({path: 'server/config/config.env'});
 
@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(bodyparser.urlencoded({extended:true}))
 app.use(cookieParser()) 
 app.use(fileUpload({useTempFiles:true}))
-
+app.use(cors());
 
 const products=require('./routes/product');
 const auth=require('./routes/auth');
